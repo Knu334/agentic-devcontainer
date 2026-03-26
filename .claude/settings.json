@@ -1,0 +1,25 @@
+{
+  "enabledMcpjsonServers": [
+    "github"
+  ],
+  "enableAllProjectMcpServers": true,
+  "permissions": {
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/*.env)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command // \"\"' | grep -qiE '(printenv|^\\s*env\\s*($|\\|)|GITHUB_PERSONAL_ACCESS_TOKEN)' && printf '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"環境変数への直接アクセスは制限されています\"}}' || exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

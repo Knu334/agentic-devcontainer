@@ -1,0 +1,57 @@
+services:
+  claude-code:
+    command: sleep infinity
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TZ: "${TZ:-Asia/Tokyo}"
+        IMAGEARCH: ${IMAGEARCH:-arm64v8/}
+        GIT_DELTA_VERSION: "0.18.2"
+        ZSH_IN_DOCKER_VERSION: "1.2.0"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    platform: linux/arm64
+    volumes:
+      - claude-code-bashhistory:/commandhistory
+      - claude-code-config:/home/node/.claude
+      - ${LOCAL_WORKSPACE_FOLDER:-.}/..:/workspace
+    environment:
+      CLAUDE_CONFIG_DIR: /home/node/.claude
+      POWERLEVEL9K_DISABLE_GITSTATUS: "true"
+      GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+    networks:
+      - mcp-net
+
+  github-mcp:
+    image: ghcr.io/github/github-mcp-server
+    platform: linux/arm64
+    command: ["http", "--port", "8080"]
+    expose:
+      - "8080"
+    networks:
+      - mcp-net
+    restart: unless-stopped
+
+  serena-mcp:
+    image: ghcr.io/oraios/serena:latest
+    platform: linux/arm64
+    volumes:
+      - serena-config:/workspaces/serena/config
+      - ${LOCAL_WORKSPACE_FOLDER:-.}/..:/workspaces/projects/${PJ_NAME}
+    command: ["serena", "start-mcp-server", "--transport", "streamable-http", "--port", "8080", "--project", "/workspaces/projects/${PJ_NAME}"]
+    expose:
+      - "8080"
+    networks:
+      - mcp-net
+    restart: unless-stopped
+
+networks:
+  mcp-net:
+    driver: bridge
+
+volumes:
+  claude-code-bashhistory:
+  claude-code-config:
+  serena-config:
