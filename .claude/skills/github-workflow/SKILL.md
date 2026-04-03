@@ -28,6 +28,7 @@ Git（コミット等）および GitHub の操作（ブランチ作成・プッ
 
 ```
 mcp__github__create_branch
+  owner: <GitHubユーザー名>
   repo: <プロジェクト名>
   branch: feature-<変更内容の概要>
   from_branch: main
@@ -41,23 +42,31 @@ git fetch origin && git checkout -b feature-<変更内容の概要> origin/main
 
 ```
 mcp__github__push_files
+  owner: <GitHubユーザー名>
   repo: <プロジェクト名>
   branch: feature-<変更内容の概要>
   files: [{ path: "<ファイルパス>", content: "<ファイル内容>" }]
   message: "<コミットメッセージ>"
 ```
 
-`mcp__github__push_files` はローカル git を更新しないため、push 後にローカルの未コミット変更をスタッシュし、そのインデックスを変数に保持する:
+`mcp__github__push_files` はローカル git を更新しないため、push 後にリモートの内容をローカルへ反映する:
 
 ```bash
-git stash push -m "mcp-push: feature-<変更内容の概要>"
-STASH_IDX=$(git stash list | grep "mcp-push: feature-<変更内容の概要>" | head -1 | grep -oP '(?<=stash@\{)\d+(?=\})')
+git pull --ff-only
 ```
+
+fast-forward によりローカルブランチがリモートの最新コミットへ進む。
+プッシュしたファイル以外のローカル変更には影響しない。
+
+> **注意**: `git checkout origin/<branch> -- <files>` は使用しない。
+> このコマンドはワーキングツリーの更新に加えてファイルをステージにも追加するため、
+> 後続の `git checkout main` がステージ済み変更を理由に失敗する。
 
 ### 3. プルリクエストを発行する
 
 ```
 mcp__github__create_pull_request
+  owner: <GitHubユーザー名>
   repo: <プロジェクト名>
   title: "<PR タイトル>"
   head: feature-<変更内容の概要>
@@ -67,9 +76,8 @@ mcp__github__create_pull_request
 
 ### 4. マージ後のローカル同期
 
-PR マージ後、main ブランチに切り替えて fast-forward し、手順2で保持したインデックスのスタッシュを削除する:
+PR マージ後、main ブランチに切り替えて fast-forward する:
 
 ```bash
 git checkout main && git pull --ff-only origin main
-git stash drop stash@{$STASH_IDX}
 ```
