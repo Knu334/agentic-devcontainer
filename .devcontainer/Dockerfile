@@ -1,5 +1,5 @@
 ARG IMAGEARCH
-FROM ${IMAGEARCH:-arm64v8/}node:25.8.1-trixie-slim
+FROM ${IMAGEARCH:-arm64v8/}node:25.8.2-trixie-slim
 
 ARG TZ
 ENV TZ="$TZ"
@@ -8,6 +8,7 @@ ENV TZ="$TZ"
 RUN apt-get update && apt-get install -y --no-install-recommends \
   less \
   git \
+  gh \
   procps \
   sudo \
   fzf \
@@ -49,11 +50,13 @@ RUN mkdir -p /workspace /home/node/.claude && \
 
 WORKDIR /workspace
 
-ARG GIT_DELTA_VERSION=0.18.2
+ARG GIT_DELTA_VERSION=0.19.2
 RUN ARCH=$(dpkg --print-architecture) && \
   wget "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   sudo dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
+
+RUN npm install -g ctx7
 
 # Set up non-root user
 USER node
@@ -81,8 +84,10 @@ RUN curl -fsSL https://claude.ai/install.sh | zsh && \
 
 # Copy and set up firewall script
 COPY init-firewall.sh /usr/local/bin/
+COPY init-context7.sh /usr/local/bin/
+COPY init-git.sh /usr/local/bin/
 USER root
-RUN chmod +x /usr/local/bin/init-firewall.sh && \
+RUN chmod +x /usr/local/bin/init-firewall.sh /usr/local/bin/init-context7.sh /usr/local/bin/init-git.sh && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
 

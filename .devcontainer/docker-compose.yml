@@ -19,25 +19,17 @@ services:
     environment:
       CLAUDE_CONFIG_DIR: /home/node/.claude
       POWERLEVEL9K_DISABLE_GITSTATUS: "true"
-      GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+      GH_TOKEN: ${GH_TOKEN}
+      CONTEXT7_API_KEY: ${CONTEXT7_API_KEY:-}
     networks:
       - mcp-net
-
-  github-mcp:
-    image: ghcr.io/github/github-mcp-server
-    command: ["http", "--port", "8080"]
-    expose:
-      - "8080"
-    networks:
-      - mcp-net
-    restart: unless-stopped
 
   serena-mcp:
     image: ghcr.io/oraios/serena:latest
     volumes:
       - serena-config:/workspaces/serena/config
       - ${LOCAL_WORKSPACE_FOLDER:-.}/..:/workspaces/projects/${PJ_NAME}
-    command: ["serena", "start-mcp-server", "--transport", "streamable-http", "--port", "8080", "--project", "/workspaces/projects/${PJ_NAME}"]
+    command: ["serena", "start-mcp-server", "--transport", "streamable-http", "--host", "0.0.0.0", "--port", "8080", "--project", "/workspaces/projects/${PJ_NAME}"]
     expose:
       - "8080"
     networks:

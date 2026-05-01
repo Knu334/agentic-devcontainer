@@ -15,7 +15,6 @@
 ## GitHub ワークフロー
 
 - 必ず `feature-<概要>` ブランチを作成し PR を発行する
-- Git/GitHub 操作は **`mcp__github__*` ツール経由**（`git push` / `gh` コマンド禁止）
-- MCP プッシュ後は `git checkout origin/<branch> -- <files>` でローカル同期（`git reset --hard` 禁止）
+- Git/GitHub 操作は **`gh` CLI** を使用する（`git push --force` / `git reset --hard` 禁止）
 
 詳細手順: `/github-workflow` スキル参照

@@ -7,10 +7,7 @@
   "forwardPorts": [],
   "customizations": {
     "vscode": {
-      "extensions": [
-        "anthropic.claude-code",
-        "eamodio.gitlens"
-      ],
+      "extensions": ["anthropic.claude-code", "eamodio.gitlens"],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
         "terminal.integrated.profiles.linux": {
@@ -21,6 +18,6 @@
       }
     }
   },
-  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "/usr/local/bin/init-git.sh && sudo /usr/local/bin/init-firewall.sh && /usr/local/bin/init-context7.sh",
   "waitFor": "postStartCommand"
 }
