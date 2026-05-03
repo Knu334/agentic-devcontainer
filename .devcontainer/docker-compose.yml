@@ -16,6 +16,7 @@ services:
       - claude-code-bashhistory:/commandhistory
       - claude-code-config:/home/node/.claude
       - codex-config:/home/node/.codex
+      - codex-agents:/home/node/.agents
       - ${LOCAL_WORKSPACE_FOLDER:-.}/..:/workspace
     environment:
       CLAUDE_CONFIG_DIR: /home/node/.claude
@@ -46,4 +47,5 @@ volumes:
   claude-code-bashhistory:
   claude-code-config:
   codex-config:
+  codex-agents:
   serena-config:
