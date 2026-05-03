@@ -18,6 +18,6 @@
       }
     }
   },
-  "postStartCommand": "/usr/local/bin/init-git.sh && sudo /usr/local/bin/init-firewall.sh && /usr/local/bin/init-context7.sh",
+  "postStartCommand": "/usr/local/bin/init-git.sh && sudo /usr/local/bin/init-firewall.sh && /usr/local/bin/init-context7.sh && /usr/local/bin/init-statusline.sh",
   "waitFor": "postStartCommand"
 }

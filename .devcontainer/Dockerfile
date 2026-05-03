@@ -66,7 +66,9 @@ RUN npm i -g @openai/codex
 COPY init-firewall.sh /usr/local/bin/
 COPY init-context7.sh /usr/local/bin/
 COPY init-git.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/init-firewall.sh /usr/local/bin/init-context7.sh /usr/local/bin/init-git.sh && \
+COPY init-statusline.sh /usr/local/bin/
+COPY statusline.sh /usr/local/lib/claude-statusline.sh
+RUN chmod +x /usr/local/bin/init-firewall.sh /usr/local/bin/init-context7.sh /usr/local/bin/init-git.sh /usr/local/bin/init-statusline.sh /usr/local/lib/claude-statusline.sh && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
 
