@@ -105,6 +105,12 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   -x
 
+RUN sed -i \
+  -e "s/^export LANG=.*/export LANG='ja_JP.UTF-8'/" \
+  -e "s/^export LANGUAGE=.*/export LANGUAGE='ja_JP:ja'/" \
+  -e "s/^export LC_ALL=.*/export LC_ALL='ja_JP.UTF-8'/" \
+  ~/.zshrc
+
 # Install Claude
 RUN curl -fsSL https://claude.ai/install.sh | zsh && \
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
