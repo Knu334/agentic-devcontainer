@@ -5,8 +5,7 @@ if [ -z "$CONTEXT7_API_KEY" ]; then
   echo "CONTEXT7_API_KEY not set, skipping context7 setup"
   exit 0
 fi
-
-if [ -d "$HOME/.claude/skills/find-docs" ] && [ -f "$HOME/.codex/instructions.md" ]; then
+if [ -d "$HOME/.claude/skills/find-docs" ] && [ -d "$HOME/.agents/skills/find-docs" ]; then
   echo "context7 already installed, skipping"
   exit 0
 fi

@@ -1,7 +1,7 @@
 {
   "name": "Claude Code Sandbox",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "claude-code",
+  "service": "devcontainer",
   "workspaceFolder": "/workspace",
   "remoteUser": "node",
   "forwardPorts": [],

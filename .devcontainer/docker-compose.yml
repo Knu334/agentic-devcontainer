@@ -1,5 +1,5 @@
 services:
-  claude-code:
+  devcontainer:
     command: sleep infinity
     build:
       context: .
@@ -15,6 +15,7 @@ services:
     volumes:
       - claude-code-bashhistory:/commandhistory
       - claude-code-config:/home/node/.claude
+      - codex-config:/home/node/.codex
       - ${LOCAL_WORKSPACE_FOLDER:-.}/..:/workspace
     environment:
       CLAUDE_CONFIG_DIR: /home/node/.claude
@@ -44,4 +45,5 @@ networks:
 volumes:
   claude-code-bashhistory:
   claude-code-config:
+  codex-config:
   serena-config:
