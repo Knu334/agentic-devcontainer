@@ -95,5 +95,7 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 
 # Install Claude
 RUN curl -fsSL https://claude.ai/install.sh | zsh && \
-  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && \
-  echo 'claude --dangerously-skip-permissions' >> ~/.zshrc
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+
+RUN echo 'alias claude="claude --dangerously-skip-permissions"' >> ~/.zshrc && \
+  echo 'alias codex="codex --dangerously-bypass-approvals-and-sandbox"' >> ~/.zshrc
