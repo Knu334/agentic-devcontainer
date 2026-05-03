@@ -56,7 +56,19 @@ RUN ARCH=$(dpkg --print-architecture) && \
   sudo dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
 
+# Install Context7
 RUN npm install -g ctx7
+
+# Install Codex
+RUN npm i -g @openai/codex
+
+# Copy and set up firewall script
+COPY init-firewall.sh /usr/local/bin/
+COPY init-context7.sh /usr/local/bin/
+COPY init-git.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/init-firewall.sh /usr/local/bin/init-context7.sh /usr/local/bin/init-git.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+  chmod 0440 /etc/sudoers.d/node-firewall
 
 # Set up non-root user
 USER node
@@ -81,14 +93,3 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 RUN curl -fsSL https://claude.ai/install.sh | zsh && \
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && \
   echo 'claude --dangerously-skip-permissions' >> ~/.zshrc
-
-# Copy and set up firewall script
-COPY init-firewall.sh /usr/local/bin/
-COPY init-context7.sh /usr/local/bin/
-COPY init-git.sh /usr/local/bin/
-USER root
-RUN chmod +x /usr/local/bin/init-firewall.sh /usr/local/bin/init-context7.sh /usr/local/bin/init-git.sh && \
-  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-  chmod 0440 /etc/sudoers.d/node-firewall
-
-USER node

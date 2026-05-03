@@ -1,0 +1,9 @@
+[mcp_servers.serena]
+uri = "http://serena-mcp:8080/mcp"
+
+[[hooks.PreToolUse]]
+matcher = "Bash"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = "bash /workspace/.codex/hooks/check-bash-command.sh"

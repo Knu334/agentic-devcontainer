@@ -6,10 +6,11 @@ if [ -z "$CONTEXT7_API_KEY" ]; then
   exit 0
 fi
 
-if [ -d "$HOME/.claude/skills/find-docs" ]; then
+if [ -d "$HOME/.claude/skills/find-docs" ] && [ -f "$HOME/.codex/instructions.md" ]; then
   echo "context7 already installed, skipping"
   exit 0
 fi
 
 echo "Installing context7 CLI + Skills..."
 ctx7 setup --claude --cli --api-key "$CONTEXT7_API_KEY" --yes
+ctx7 setup --codex --cli --api-key "$CONTEXT7_API_KEY" --yes

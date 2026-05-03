@@ -90,11 +90,13 @@ done < <(echo "$google_ranges" | jq -r '.prefixes[] | select(.ipv4Prefix != null
 for domain in \
     "registry.npmjs.org" \
     "api.anthropic.com" \
-    "statsig.anthropic.com" \
     "marketplace.visualstudio.com" \
     "vscode.blob.core.windows.net" \
     "update.code.visualstudio.com" \
-    "context7.com"; do
+    "context7.com" \
+    "api.openai.com" \
+    "auth.openai.com" \
+    "auth0.openai.com"; do
     echo "Resolving $domain..."
     ips=$(dig +noall +answer A "$domain" | awk '$4 == "A" {print $5}' | sort -u)
     if [ -z "$ips" ]; then
