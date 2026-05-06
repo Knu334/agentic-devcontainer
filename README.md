@@ -1,4 +1,4 @@
-# Claude Code DevContainer
+# agentic-devcontainer
 
 Claude Code / Codex CLIプロジェクト向けDevContainerテンプレート。  
 デフォルトで[Serena MCP](https://github.com/oraios/serena)（トークン消費改善用）をHTTPモードでセットアップする。  
